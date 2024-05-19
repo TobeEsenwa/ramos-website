@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import GetStarted from './components/GetStarted/index';
+import ControlSection from './components/ControlSection/index';
+import DataSection from './components/DataSection/index';
+import MaximizeEfficiency from './components/MaximizeEfficiency/index';
+import MainSection from './components/MainSection/index';
+import AnalyticsSection from './components/AnalyticsSection/index';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+gsap.registerPlugin(ScrollToPlugin);
+
+const App: React.FC = () => {
+	useEffect(() => {
+		const links = document.querySelectorAll("a[href^='#']");
+
+		links.forEach(link => {
+			link.addEventListener("click", (event) => {
+				event.preventDefault();
+				const target = document.querySelector((link as HTMLAnchorElement).getAttribute("href") as string);
+
+				if (target) {
+					gsap.to(window, { duration: 1, scrollTo: { y: target, offsetY: 70 } });
+				}
+			});
+		});
+	}, []);
+
+	return (
+		<main className="mx-auto overflow-hidden">
+			<Header />
+			<MainSection />
+			<AnalyticsSection />
+			<MaximizeEfficiency />
+			<DataSection />
+			<ControlSection />
+			<GetStarted />
+			<Footer />
+		</main>
+	);
+};
 
 export default App;
