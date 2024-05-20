@@ -1,11 +1,49 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 import GraphLine from '../ImageComponents/GraphLine';
 import InsightsIcon from '../ImageComponents/InsightsIcon';
 import FinanceIcon from '../ImageComponents/FinanceIcon';
 
 const KeyIndicatorsCard: React.FC = () => {
+	const cardRef = useRef<HTMLDivElement | null>(null);
+
+	useEffect(() => {
+		const cardElement = cardRef.current;
+		const squares = cardElement?.querySelectorAll('.animated-square');
+
+		if (cardElement && squares) {
+			gsap.set(squares, { height: 0 });
+
+			const observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							gsap.to(squares, {
+								height: (index, target) => target.getAttribute('data-height'),
+								duration: 1.5,
+								ease: 'power3.out',
+							});
+						} else {
+							gsap.set(squares, { height: 0 });
+						}
+					});
+				},
+				{ threshold: 0.1 }
+			);
+
+			observer.observe(cardElement);
+
+			return () => {
+				observer.unobserve(cardElement);
+			};
+		}
+	}, []);
+
 	return (
-		<div className="flex-1 relative p-[40px_90px] z-10 overflow-hidden rounded-3xl bg-[#F9F9F9] text-center mx-auto shadow-xl shadow-[#b0aeae27] border border-[#ededed]">
+		<div
+			ref={cardRef}
+			className="flex-1 relative p-[40px_90px] z-10 overflow-hidden rounded-3xl bg-[#F9F9F9] text-center mx-auto shadow-xl shadow-[#b0aeae27] border border-[#ededed]"
+		>
 			<div className="absolute w-full h-1/2 -z-10 bg-[#F9F9F9] top-0 left-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]"></div>
 			<div className="bg-[#FBFBFB] relative w-[80%] mx-auto -z-2 rounded-t-2xl p-5 border border-[#EEEEEE] shadow-xl shadow-[#e1dcdc31] flex justify-center items-end gap-16"></div>
 			<div className="bg-[#FBFBFB] w-[90%] relative -top-[20px] mx-auto -z-1 rounded-t-2xl p-3 border border-[#EEEEEE] shadow-xl shadow-[#e1dcdc31] flex justify-start items-end gap-16">
@@ -36,23 +74,23 @@ const KeyIndicatorsCard: React.FC = () => {
 					</div>
 					<div className="flex justify-center gap-3 items-end max-h-[200px]">
 						<div className="flex flex-col items-center">
-							<div className="w-[25px] rounded-md" style={{ height: '60px', background: 'rgb(230, 230, 230)' }}></div>
+							<div className="animated-square w-[25px] rounded-md bg-[rgb(230,230,230)]" data-height="60px"></div>
 							<p className="text-[8px] text-[#d7d6d6] mt-2">2021</p>
 						</div>
 						<div className="flex flex-col items-center">
-							<div className="w-[25px] rounded-md" style={{ height: '25px', background: 'rgb(230, 230, 230)' }}></div>
+							<div className="animated-square w-[25px] rounded-md bg-[rgb(230,230,230)]" data-height="25px"></div>
 							<p className="text-[8px] text-[#d7d6d6] mt-2">2020</p>
 						</div>
 						<div className="flex flex-col items-center">
-							<div className="w-[25px] rounded-md" style={{ height: '60px', background: 'rgb(230, 230, 230)' }}></div>
+							<div className="animated-square w-[25px] rounded-md bg-[rgb(230,230,230)]" data-height="60px"></div>
 							<p className="text-[8px] text-[#d7d6d6] mt-2">2019</p>
 						</div>
 						<div className="flex flex-col items-center">
-							<div className="w-[25px] rounded-md" style={{ height: '90px', background: 'rgb(255, 208, 38)' }}></div>
+							<div className="animated-square w-[25px] rounded-md bg-[rgb(255,208,38)]" data-height="90px"></div>
 							<p className="text-[8px] text-[#d7d6d6] mt-2">2018</p>
 						</div>
 						<div className="flex flex-col items-center">
-							<div className="w-[25px] rounded-md" style={{ height: '45px', background: 'rgb(230, 230, 230)' }}></div>
+							<div className="animated-square w-[25px] rounded-md bg-[rgb(230,230,230)]" data-height="45px"></div>
 							<p className="text-[8px] text-[#d7d6d6] mt-2">2017</p>
 						</div>
 					</div>
